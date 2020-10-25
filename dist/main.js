@@ -5364,6 +5364,7 @@ async function run() {
         const ignoreOptsFiles = /true/i.test(core.getInput('ignore-opts-files'));
         const cacheTTL = core.getInput('cache-ttl');
         const githubApiUrl = core.getInput('github-api-url');
+        const fork = /true/i.test(core.getInput('fork'));
         await coursier.launch('org.scala-steward', 'scala-steward-core_2.13', version, [
             ['--workspace', `${workspaceDir}/workspace`],
             ['--repos-file', `${workspaceDir}/repos.md`],
@@ -5377,7 +5378,7 @@ async function run() {
             ignoreOptsFiles ? '--ignore-opts-files' : [],
             signCommits ? '--sign-commits' : [],
             ['--cache-ttl', cacheTTL],
-            '--do-not-fork',
+            fork ? [] : '--do-not-fork',
             '--disable-sandbox'
         ]);
         await workspace.saveWorkspaceCache(workspaceDir);
